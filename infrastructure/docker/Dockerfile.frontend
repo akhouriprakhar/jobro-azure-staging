@@ -5,6 +5,11 @@ COPY apps/frontend/package.json apps/frontend/package-lock.json ./
 RUN npm install
 
 COPY apps/frontend ./
+
+# Fallback values to satisfy static prerendering during next build
+ENV NEXT_PUBLIC_SUPABASE_URL="https://placeholder.supabase.co"
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder"
+
 RUN npm run build
 
 FROM node:20-alpine AS runtime
@@ -13,7 +18,7 @@ WORKDIR /app
 COPY --from=base /app/.next .next
 COPY --from=base /app/public public
 COPY --from=base /app/package.json package.json
-RUN npm install --production
+RUN npm install --omit=dev
 
 EXPOSE 3000
 CMD ["npm", "run", "start"]
