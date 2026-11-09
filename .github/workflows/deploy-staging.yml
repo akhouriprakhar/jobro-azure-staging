@@ -1,0 +1,30 @@
+name: Build and Push Containers to ACR
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/jobro-backend:staging-latest -f infrastructure/docker/Dockerfile.backend .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/jobro-backend:staging-latest
+
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/jobro-frontend:staging-latest -f infrastructure/docker/Dockerfile.frontend .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/jobro-frontend:staging-latest
