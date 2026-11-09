@@ -1,0 +1,30 @@
+# Node
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.vscode
+.DS_Store
+.env*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+pip-wheel-metadata/
+*.env
+
+# Build
+.build/
+dist/
+.next/
+out/
+
+# Docker
+docker-compose.override.yml
+.env.local

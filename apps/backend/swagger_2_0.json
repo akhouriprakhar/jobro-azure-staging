@@ -1,0 +1,350 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "JOBRO Backend",
+    "version": "0.1.0",
+    "description": "FastAPI Swagger 2.0 compatibility contract for Microsoft Power Platform."
+  },
+  "host": "fine-turkeys-divide.loca.lt",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api/v1/interview/chat": {
+      "post": {
+        "summary": "Chat Interview",
+        "description": "Conduct interactive dialogue with the Copilot agent.",
+        "operationId": "chat_interview",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/ChatResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/interview/submit": {
+      "post": {
+        "summary": "Submit Interview",
+        "description": "Accept candidate interview data and return initial scoring metadata.",
+        "operationId": "submit_interview",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InterviewRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/InterviewResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/interview/context": {
+      "post": {
+        "summary": "Save Context",
+        "description": "Save candidate CV and Job Description context for a session.",
+        "operationId": "save_interview_context",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContextSaveRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/interview/context/{interview_id}": {
+      "get": {
+        "summary": "Get Context",
+        "description": "Retrieve the candidate's saved CV and JD context.",
+        "operationId": "get_interview_context",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "interview_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/ContextResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/interview/chat_simple": {
+      "post": {
+        "summary": "Chat Interview Simple",
+        "description": "Stateless chat dialogue endpoint optimized for Microsoft Copilot Studio.",
+        "operationId": "chat_interview_simple",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SimpleChatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/SimpleChatResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ChatMessage": {
+      "type": "object",
+      "required": [
+        "role",
+        "content"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "ChatRequest": {
+      "type": "object",
+      "required": [
+        "interview_id",
+        "candidate_id",
+        "messages"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChatMessage"
+          }
+        },
+        "cv_text": {
+          "type": "string"
+        },
+        "job_description": {
+          "type": "string"
+        }
+      }
+    },
+    "ChatResponse": {
+      "type": "object",
+      "required": [
+        "response"
+      ],
+      "properties": {
+        "response": {
+          "type": "string"
+        },
+        "coaching_insight": {
+          "type": "string"
+        }
+      }
+    },
+    "InterviewRequest": {
+      "type": "object",
+      "required": [
+        "interview_id",
+        "candidate_id",
+        "question",
+        "transcript",
+        "duration_seconds",
+        "started_at",
+        "finished_at"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "transcript": {
+          "type": "string"
+        },
+        "duration_seconds": {
+          "type": "integer"
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "finished_at": {
+          "type": "string"
+        }
+      }
+    },
+    "InterviewResponse": {
+      "type": "object",
+      "required": [
+        "interview_id",
+        "candidate_id",
+        "communication_score",
+        "confidence_score",
+        "recommendation"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "communication_score": {
+          "type": "integer"
+        },
+        "confidence_score": {
+          "type": "integer"
+        },
+        "recommendation": {
+          "type": "string"
+        }
+      }
+    },
+    "ContextSaveRequest": {
+      "type": "object",
+      "required": [
+        "interview_id",
+        "cv_text",
+        "job_description"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "cv_text": {
+          "type": "string"
+        },
+        "job_description": {
+          "type": "string"
+        }
+      }
+    },
+    "ContextResponse": {
+      "type": "object",
+      "required": [
+        "interview_id"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "cv_text": {
+          "type": "string"
+        },
+        "job_description": {
+          "type": "string"
+        }
+      }
+    },
+    "SimpleChatRequest": {
+      "type": "object",
+      "required": [
+        "interview_id",
+        "user_message"
+      ],
+      "properties": {
+        "interview_id": {
+          "type": "string"
+        },
+        "user_message": {
+          "type": "string"
+        }
+      }
+    },
+    "SimpleChatResponse": {
+      "type": "object",
+      "required": [
+        "response"
+      ],
+      "properties": {
+        "response": {
+          "type": "string"
+        },
+        "coaching_insight": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
