@@ -1,12 +1,11 @@
 FROM node:20-alpine AS base
 WORKDIR /app
 
-COPY apps/frontend/package.json apps/frontend/package-lock.json ./
+COPY apps/frontend/package.json apps/frontend/package-lock.json* ./
 RUN npm install
 
 COPY apps/frontend ./
 
-# Fallback values to satisfy static prerendering during next build
 ENV NEXT_PUBLIC_SUPABASE_URL="https://placeholder.supabase.co"
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder"
 
